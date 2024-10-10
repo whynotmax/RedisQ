@@ -29,13 +29,14 @@ public final class RedisQ extends JavaPlugin {
         if (!configFile.exists()) {
             config = new dev.mzcy.util.Config(getDataFolder().getPath(), "config.yml", (cfg) -> {
                 cfg.getConfig().addDefault("redis.url", "redis://127.0.0.1:6379");
-                cfg.getConfig().addDefault("redis.password", "");
+                cfg.getConfig().addDefault("redis.password", "password");
                 cfg.getConfig().addDefault("general.prefix", "<dark_gray>[<red>RedisQ<dark_gray>]<gray>");
                 cfg.getConfig().addDefault("general.no-permission", "%prefix% <red>You do not have permission to do that. (%permission%)");
                 cfg.getConfig().addDefault("general.no-console", "%prefix% <red>This command can only be executed by players.");
                 cfg.getConfig().addDefault("general.no-args", "%prefix% <red>Usage: %usage%");
                 cfg.getConfig().addDefault("general.no-queue", "%prefix% <red>Queue with the name %name% not found.");
                 cfg.getConfig().addDefault("general.sending-to-server", "%prefix% <gray>Sending you to %server%...");
+                cfg.getConfig().addDefault("general.queue-left", "%prefix% <gray>You have left the queue.");
             });
         }
 
