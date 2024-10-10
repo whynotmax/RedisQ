@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -27,13 +28,31 @@ public class QueueManager {
         if (!queueFolder.toFile().exists()) {
             queueFolder.toFile().mkdir();
         }
-        //Search for yml files in the folder
-        //For each file, create a new QueueModel and RQueue<String>
-        //Add the QueueModel and RQueue<String> to the queues map
+        //Create template file
+        File templateFile = new File(queueFolder.toString(), "_template.yml");
+        if (!templateFile.exists()) {
+            Config config = new Config(queueFolder.toString(), "_template.yml", (conf) -> {
+                conf.getConfig().addDefault("name", "queue");
+                conf.getConfig().setComments("name", List.of("Name of the queue"));
+                conf.getConfig().addDefault("displayName", "Queue");
+                conf.getConfig().setComments("displayName", List.of("Display name of the queue"));
+                conf.getConfig().addDefault("server", "lobby");
+                conf.getConfig().setComments("server", List.of("Server to send players to"));
+                conf.getConfig().addDefault("maxPlayersInQueue", -1);
+                conf.getConfig().setComments("maxPlayersInQueue", List.of("Maximum players in the queue.", "-1 for unlimited"));
+                conf.saveConfig();
+            });
+        }
 
         try {
             Files.find(queueFolder, 1, (path, basicFileAttributes) -> path.toString().endsWith(".yml"))
                     .forEach(path -> {
+                        if (path.toFile().isDirectory()) {
+                            return;
+                        }
+                        if (!path.toFile().getName().equalsIgnoreCase("_template.yml")) {
+                            return;
+                        }
                         File file = path.toFile();
                         String name = file.getName().replace(".yml", "");
                         this.create(name, file);
