@@ -1,0 +1,4 @@
+name: RedisQ
+version: '1.0-SNAPSHOT'
+main: dev.mzcy.RedisQ
+api-version: '1.20'
