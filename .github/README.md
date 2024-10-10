@@ -40,5 +40,5 @@ general:
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Credits
-- [Max](github.com/whynotmax) - Developer
-- [All Contributors](github.com/whynotmax/RedisQ/graphs/contributors)
+- [Max](https://github.com/whynotmax) - Developer
+- [All Contributors](https://github.com/whynotmax/RedisQ/graphs/contributors)
