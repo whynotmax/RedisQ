@@ -15,6 +15,10 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven {
+        name = "fancylib"
+        url = "https://repo.fancyplugins.de/releases"
+    }
 }
 
 dependencies {
@@ -22,6 +26,7 @@ dependencies {
     implementation 'org.redisson:redisson:3.22.0'
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
+    compileOnly('de.oliver:FancyNpcs:2.4.4')
 }
 
 def targetJavaVersion = 17
