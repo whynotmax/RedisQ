@@ -71,6 +71,7 @@ public class QueueManager {
             conf.getConfig().addDefault("maxPlayersInQueue", -1);
             conf.saveConfig();
         });
+
         QueueModel queueModel = new QueueModel();
         queueModel.setName(config.getConfig().getString("name"));
         queueModel.setDisplayName(config.getConfig().getString("displayName"));
@@ -148,6 +149,23 @@ public class QueueManager {
             return;
         }
         redisQ.getLogger().warning("Player with UUID " + uuidString + " not found. Could not send to server.");
+    }
+
+    public int getPositionInQueue(String queueName, UUID uniqueId) {
+        QueueModel queueModel = queueNames.get(queueName);
+        if (queueModel == null) {
+            redisQ.getLogger().warning("Queue with the name " + queueName + " not found.");
+            return -1;
+        }
+        RQueue<String> queue = queues.get(queueModel);
+        int position = 0;
+        for (String uuidString : queue) {
+            if (uuidString.equals(uniqueId.toString())) {
+                return position;
+            }
+            position++;
+        }
+        return -1;
     }
 
 }

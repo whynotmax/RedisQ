@@ -36,6 +36,21 @@ general:
 5. Reload the server or restart it
 6. You're done!
 
+## Developer API
+You can use the API to queue up players from your own plugins. Here is an example:
+```java
+
+```
+
+Additionally, you can listen to the following events:
+- `QueueJoinEvent` - Called when a player joins the queue
+- `QueueLeaveEvent` - Called when a player leaves the queue
+- `QueueSendEvent` - Called when a player is sent to a server
+
+## Support
+If you need help with the plugin, you can message me.
+Please take a look at my [profile readme](https://github.com/whynotmax/whynotmax/) for more information.
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 

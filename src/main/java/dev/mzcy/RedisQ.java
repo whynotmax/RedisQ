@@ -18,6 +18,7 @@ public final class RedisQ extends JavaPlugin {
     public static String NO_ARGS;
     public static String NO_QUEUE;
     public static String SENDING_TO_SERVER;
+    public static String QUEUE_LEFT;
 
     @Override
     public void onEnable() {
@@ -46,6 +47,7 @@ public final class RedisQ extends JavaPlugin {
         NO_ARGS = this.config.getConfig().getString("general.no-args").replace("%prefix%", PREFIX);
         NO_QUEUE = this.config.getConfig().getString("general.no-queue").replace("%prefix%", PREFIX);
         SENDING_TO_SERVER = this.config.getConfig().getString("general.sending-to-server").replace("%prefix%", PREFIX);
+        QUEUE_LEFT = this.config.getConfig().getString("general.queue-left").replace("%prefix%", PREFIX);
 
         Config config = new Config();
         String redisUrl = this.config.getConfig().getString("redis.url");
