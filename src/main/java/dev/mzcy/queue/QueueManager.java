@@ -3,6 +3,9 @@ package dev.mzcy.queue;
 import dev.mzcy.RedisQ;
 import dev.mzcy.queue.model.QueueModel;
 import dev.mzcy.util.Config;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.redisson.api.RQueue;
@@ -12,10 +15,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@Getter
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class QueueManager {
 
     RedisQ redisQ;
@@ -24,6 +30,8 @@ public class QueueManager {
 
     public QueueManager(RedisQ redisQ) {
         this.redisQ = redisQ;
+        this.queueNames = new HashMap<>();
+        this.queues = new HashMap<>();
         Path queueFolder = Paths.get(redisQ.getDataFolder().getPath(), "queues");
         if (!queueFolder.toFile().exists()) {
             queueFolder.toFile().mkdir();
@@ -36,8 +44,12 @@ public class QueueManager {
                 conf.getConfig().setComments("name", List.of("Name of the queue"));
                 conf.getConfig().addDefault("displayName", "Queue");
                 conf.getConfig().setComments("displayName", List.of("Display name of the queue"));
+                conf.getConfig().addDefault("npcId", "none");
+                conf.getConfig().setComments("npcId", List.of("NPC ID to interact with to join the queue. Set to 'none' to disable.", "Currently only supports FancyNPCs"));
                 conf.getConfig().addDefault("server", "lobby");
                 conf.getConfig().setComments("server", List.of("Server to send players to"));
+                conf.getConfig().addDefault("sendIntervalSeconds", 5);
+                conf.getConfig().setComments("sendIntervalSeconds", List.of("Interval in seconds to send players to the server"));
                 conf.getConfig().addDefault("maxPlayersInQueue", -1);
                 conf.getConfig().setComments("maxPlayersInQueue", List.of("Maximum players in the queue.", "-1 for unlimited"));
                 conf.saveConfig();
@@ -67,7 +79,9 @@ public class QueueManager {
         Config config = new Config(configFile.getParent(), configFile.getName(), (conf) -> {
             conf.getConfig().addDefault("name", queueName);
             conf.getConfig().addDefault("displayName", queueName);
-            conf.getConfig().addDefault("server", "all");
+            conf.getConfig().addDefault("npcId", "none");
+            conf.getConfig().addDefault("server", "lobby");
+            conf.getConfig().addDefault("sendIntervalSeconds", 5);
             conf.getConfig().addDefault("maxPlayersInQueue", -1);
             conf.saveConfig();
         });
@@ -75,7 +89,9 @@ public class QueueManager {
         QueueModel queueModel = new QueueModel();
         queueModel.setName(config.getConfig().getString("name"));
         queueModel.setDisplayName(config.getConfig().getString("displayName"));
+        queueModel.setNpcId(config.getConfig().getString("npcId"));
         queueModel.setServer(config.getConfig().getString("server"));
+        queueModel.setSendIntervalSeconds(config.getConfig().getLong("sendIntervalSeconds"));
         queueModel.setMaxPlayersInQueue(config.getConfig().getLong("maxPlayersInQueue"));
         RQueue<String> queue = redisQ.getRedissonClient().getQueue(queueModel.getName());
         queueNames.put(queueModel.getName(), queueModel);

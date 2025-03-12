@@ -16,7 +16,9 @@ public class QueueModel {
     String name;
     String displayName;
     String server;
+    String npcId;
 
+    long sendIntervalSeconds;
     long maxPlayersInQueue;
 
 }
